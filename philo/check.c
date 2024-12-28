@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 12:40:47 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 17:59:23 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/28 18:22:31 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_dead(t_philo *philo, t_general gen)
 	if (time - philo->last_eat > gen.time_to_die)
 	{
 		pthread_mutex_lock(&gen.print);
-		printf("%ld %d is dead \n", time, philo->num);
+		printf("%ld %d died\n", time, philo->num);
 		pthread_mutex_unlock(&gen.print);
 		philo->dead = 1;
 		return (1);
