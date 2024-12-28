@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 12:40:47 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 15:50:20 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/28 17:59:23 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,17 @@ int	check_fork(int l_f, int r_f, t_fork **fork)
 {
 	pthread_mutex_lock(&fork[l_f]->lock);
 	if (fork[l_f]->status == 1)
+	{
+		pthread_mutex_unlock(&fork[l_f]->lock);
 		return (0);
+	}
 	pthread_mutex_unlock(&fork[l_f]->lock);
 	pthread_mutex_lock(&fork[r_f]->lock);
 	if (fork[r_f]->status == 1)
+	{
+		pthread_mutex_unlock(&fork[r_f]->lock);
 		return (0);
+	}
 	pthread_mutex_unlock(&fork[r_f]->lock);
 	return (1);
 }

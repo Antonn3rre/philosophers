@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 16:22:38 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 14:37:52 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/28 17:56:26 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,17 @@
 
 void	eating(t_general *gen, t_philo *philo, t_fork **fork)
 {
-		if (philo->num % 2 == 0)
-		{
-			pthread_mutex_lock(&fork[philo->l_f]->lock);
-			fork[philo->l_f]->status = 1;
-			pthread_mutex_unlock(&fork[philo->l_f]->lock);
+		pthread_mutex_lock(&fork[philo->r_f]->lock);
+		fork[philo->r_f]->status = 1;
+		pthread_mutex_unlock(&fork[philo->r_f]->lock);
 				
-			pthread_mutex_lock(&gen->print);
-			printf("%ld %d  has taken a fork\n", get_time(), philo->num);
-			pthread_mutex_unlock(&gen->print);
-			
-			pthread_mutex_lock(&fork[philo->r_f]->lock);
-			fork[philo->r_f]->status = 1;
-			pthread_mutex_unlock(&fork[philo->r_f]->lock);
-		}
-		else
-		{
-			pthread_mutex_lock(&fork[philo->r_f]->lock);
-			fork[philo->r_f]->status = 1;
-			pthread_mutex_unlock(&fork[philo->r_f]->lock);
-				
-			pthread_mutex_lock(&gen->print);
-			printf("%ld %d  has taken a fork\n", get_time(), philo->num);
-			pthread_mutex_unlock(&gen->print);
-			
-			pthread_mutex_lock(&fork[philo->l_f]->lock);
-			fork[philo->r_f]->status = 1;
-			pthread_mutex_unlock(&fork[philo->l_f]->lock);
-
-		}
+		pthread_mutex_lock(&gen->print);
+		printf("%ld %d  has taken a fork\n", get_time(), philo->num);
+		pthread_mutex_unlock(&gen->print);
+	
+		pthread_mutex_lock(&fork[philo->l_f]->lock);
+		fork[philo->r_f]->status = 1;
+		pthread_mutex_unlock(&fork[philo->l_f]->lock);
 		pthread_mutex_lock(&gen->print);
 		printf("%ld %d  has taken a fork\n", get_time(), philo->num);
 		printf("%ld %d is eating\n", get_time(), philo->num);
@@ -51,6 +33,7 @@ void	eating(t_general *gen, t_philo *philo, t_fork **fork)
 		pthread_mutex_lock(&philo->lock);
 		philo->last_eat = get_time();
 		philo->eating = 1;
+		philo->thinking = 0;
 		pthread_mutex_unlock(&philo->lock);
 		
 		usleep(gen->time_to_eat * 1000);

@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:10:21 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 15:43:33 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/28 18:06:03 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,19 @@ void	*beginning(void *arg)
 		usleep(total->gen->time_to_eat * 2 * 1000);
 	while(1)
 	{
+		if (total->philo[i]->thinking == 0)
+		{
+			pthread_mutex_lock(&total->philo[i]->lock);
+			total->philo[i]->thinking = 1;
+			pthread_mutex_unlock(&total->philo[i]->lock);
+			pthread_mutex_lock(&total->gen->print);
+			printf("%ld %d is thinking\n", get_time(), total->philo[i]->num);
+			pthread_mutex_unlock(&total->gen->print);
+		}
 		if (check_fork(total->philo[i]->l_f, total->philo[i]->r_f, total->fork))
 			eating(total->gen, total->philo[i], total->fork);
-		// thinking (boucle infinie tant que fork pas dispo)
+		else
+			usleep(10);
 	}
 	return (NULL);
 }
