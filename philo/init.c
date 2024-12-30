@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 18:07:11 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 15:50:04 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/30 13:35:35 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ t_general	init_gen(int argc, char **argv) // ok, ajouter verif ?
 	gettimeofday(&tv, NULL);
 	gen.begin = (tv.tv_sec * 1000) + (tv.tv_usec);
 	gen.nb_of_philo = ft_atoi(argv[1]);
-	gen.time_to_die = ft_atoi(argv[2]);
-	gen.time_to_eat = ft_atoi(argv[3]);
-	gen.time_to_sleep = ft_atoi(argv[4]);
+	gen.time_to_die = ft_atoi(argv[2]) * 1000;
+	gen.time_to_eat = ft_atoi(argv[3]) * 1000;
+	gen.time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (argc == 6)
 		gen.must_eat = ft_atoi(argv[5]);
 	else
@@ -89,7 +89,7 @@ t_philo	*init_philo(t_general gen, int i)
 	philo->last_eat = gen.begin;
 	philo->sleeping = 0;
 	philo->eating = 0;
-	philo->thinking = 0;
+	philo->thinking = 1;
 	philo->times_eaten = 0;
 	philo->dead = 0;
 	philo->l_f = i;

@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 16:22:38 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 17:56:26 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/30 13:36:07 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	eating(t_general *gen, t_philo *philo, t_fork **fork)
 		philo->thinking = 0;
 		pthread_mutex_unlock(&philo->lock);
 		
-		usleep(gen->time_to_eat * 1000);
+		usleep(gen->time_to_eat);
 		
 		pthread_mutex_lock(&fork[philo->l_f]->lock);
 		fork[philo->l_f]->status = 0;
@@ -61,7 +61,7 @@ void	sleeping(t_general *gen, t_philo *philo)
 		pthread_mutex_lock(&gen->print);
 		printf("%ld %d is sleeping\n", get_time(), philo->num);
 		pthread_mutex_unlock(&gen->print);
-		usleep(gen->time_to_sleep * 1000);
+		usleep(gen->time_to_sleep);
 		pthread_mutex_lock(&philo->lock);
 		philo->sleeping = 0;
 		pthread_mutex_unlock(&philo->lock);

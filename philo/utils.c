@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:09:28 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/27 18:05:14 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/30 13:57:51 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ long int	get_time(void)
 
 	if (gettimeofday(&current_t, NULL) == -1)
 		return (-1);
-	return (current_t.tv_sec * 1000) + (current_t.tv_usec);
+	return (current_t.tv_sec * 1000) + (current_t.tv_usec / 1000);
 }

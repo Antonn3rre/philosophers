@@ -6,7 +6,7 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:10:21 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 18:06:03 by agozlan          ###   ########.fr       */
+/*   Updated: 2024/12/30 15:42:19 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	*beginning(void *arg)
 	i = data->philo_index;
 	free(data);
 	if (total->philo[i]->num % 2 == 1)
-		usleep(total->gen->time_to_eat * 1000);
+		usleep(total->gen->time_to_eat);
 	if (total->gen->nb_of_philo % 2 == 1 && i + 1 == total->gen->nb_of_philo)
-		usleep(total->gen->time_to_eat * 2 * 1000);
+		usleep(total->gen->time_to_eat * 2);
 	while(1)
 	{
 		if (total->philo[i]->thinking == 0)
@@ -73,14 +73,7 @@ int main(int argc, char **argv)
 	if (!create_thread(total, gen.nb_of_philo))
 		return (0);
 	while (!check_finished(philo, gen)) // avant ou apres pthread join ?
-		usleep(1000);
-	/*
-	while (i < gen.nb_of_philo)
-	{
-		pthread_join(philo[i]->thread, NULL);
-		i++;
-	}
-	*/
+		usleep(10);
 	finishing(gen, philo, fork, total);
 	return (0);
 }
