@@ -6,39 +6,58 @@
 /*   By: agozlan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 12:40:47 by agozlan           #+#    #+#             */
-/*   Updated: 2024/12/28 18:22:31 by agozlan          ###   ########.fr       */
+/*   Updated: 2025/02/27 18:44:27 by agozlan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	check_dead(t_philo *philo, t_general gen)
+int	check_arg(t_general gen, char **argv)
+{
+	if (gen.time_to_die < 0 || gen.time_to_eat < 0 || gen.time_to_sleep < 0)
+		return (error_arg(), 0);
+	if (gen.nb_of_philo < 0)
+		return (error_arg(), 0);
+	if (argv[5])
+	{
+		if (ft_atoi_phi(argv[5]) < 0)
+			return (error_arg(), 0);
+	}
+	return (1);
+}
+
+int	check_dead(t_philo *philo, t_general gen, t_mut *mut)
 {
 	long int	time;
 
-	time = get_time();
+	time = get_time(gen);
+	if (time == -1)
+		return (-1);
 	if (time - philo->last_eat > gen.time_to_die)
 	{
-		pthread_mutex_lock(&gen.print);
+		pthread_mutex_lock(&mut->th_end);
+		mut->end = 1;
+		pthread_mutex_unlock(&mut->th_end);
+		pthread_mutex_lock(&mut->print);
 		printf("%ld %d died\n", time, philo->num);
-		pthread_mutex_unlock(&gen.print);
+		pthread_mutex_unlock(&mut->print);
 		philo->dead = 1;
 		return (1);
 	}
 	return (0);
 }
 
-int	check_finished(t_philo **philo, t_general gen)
+int	check_end(t_philo **philo, t_general gen, t_mut *mut)
 {
 	int	i;
 	int	finished;
 
 	finished = 0;
-	i = 0;
-	while (i < gen.nb_of_philo)
+	i = -1;
+	while (++i < gen.nb_of_philo)
 	{
 		pthread_mutex_lock(&philo[i]->lock);
-		if (check_dead(philo[i], gen))
+		if (check_dead(philo[i], gen, mut))
 		{
 			pthread_mutex_unlock(&philo[i]->lock);
 			return (1);
@@ -46,10 +65,14 @@ int	check_finished(t_philo **philo, t_general gen)
 		if (gen.must_eat >= 0 && philo[i]->times_eaten >= gen.must_eat)
 			finished++;
 		pthread_mutex_unlock(&philo[i]->lock);
-		i++;
 	}
 	if (finished == gen.nb_of_philo)
+	{
+		pthread_mutex_lock(&mut->th_end);
+		mut->end = 1;
+		pthread_mutex_unlock(&mut->th_end);
 		return (1);
+	}
 	return (0);
 }
 

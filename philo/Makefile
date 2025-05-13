@@ -5,7 +5,8 @@ CC = cc
 RM = rm -rf
 
 
-SRCS = philo.c init.c utils.c free.c action.c check.c
+SRCS = main.c init_utils.c utils.c finish.c begin.c check.c init_total.c begin_utils.c \
+	   go_usleep.c error.c
 OBJS = $(SRCS:.c=.o)
 
 HEADERS = philosophers.h
